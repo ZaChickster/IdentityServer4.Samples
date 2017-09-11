@@ -17,11 +17,20 @@ namespace QuickstartIdentityServer
 
             // configure identity server with in-memory stores, keys, clients and scopes
             services.AddIdentityServer()
-                .AddTemporarySigningCredential()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
-                .AddTestUsers(Config.GetUsers());
+	            .AddDeveloperSigningCredential()
+				.AddTestUsers(Config.GetUsers());
+
+	        services.AddAuthentication().AddGoogle(options =>
+	        {
+		        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+		        options.ClientId = "434483408261-55tc8n0cs4ff1fe21ea8df2o443v2iuc.apps.googleusercontent.com";
+		        options.ClientSecret = "3gcoTrEDPPJ0ukn_aYYT6PWo";
+
+	        });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -31,16 +40,7 @@ namespace QuickstartIdentityServer
 
             app.UseIdentityServer();
 
-            app.UseGoogleAuthentication(new GoogleOptions
-            {
-                AuthenticationScheme = "Google",
-                DisplayName = "Google",
-                SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-
-                ClientId = "434483408261-55tc8n0cs4ff1fe21ea8df2o443v2iuc.apps.googleusercontent.com",
-                ClientSecret = "3gcoTrEDPPJ0ukn_aYYT6PWo"
-            });
-
+            app.UseAuthentication();
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
         }

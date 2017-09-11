@@ -200,3 +200,4 @@ FakesAssemblies/
 
 .DS_STORE
 .idea/
+Quickstarts/7_JavaScriptClient/src/QuickstartIdentityServer/tempkey.rsa

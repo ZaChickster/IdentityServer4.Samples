@@ -37,6 +37,13 @@ namespace Api
                 });
             });
 
+	        services.AddAuthentication().AddIdentityServerAuthentication(options =>
+	        {
+		        options.Authority = "http://localhost:5000";
+		        options.RequireHttpsMetadata = false;
+		        options.ApiName = "api1";
+	        });
+
             services.AddMvcCore()
                 .AddAuthorization()
                 .AddJsonFormatters();
@@ -49,15 +56,7 @@ namespace Api
 
             // this uses the policy called "default"
             app.UseCors("default");
-
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            {
-                Authority = "http://localhost:5000",
-                RequireHttpsMetadata = false,
-
-                ApiName = "api1"
-            });
-
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
