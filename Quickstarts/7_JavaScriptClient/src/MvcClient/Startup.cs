@@ -35,7 +35,7 @@ namespace MvcClient
 			.AddCookie()
 			.AddOpenIdConnect(options =>
 	        {
-		        options.Authority = "http://localhost:5000";
+				options.Authority = "http://localhost:5000";
 		        options.RequireHttpsMetadata = false;
 
 		        options.ClientId = "mvc";
@@ -47,7 +47,6 @@ namespace MvcClient
 
 				options.GetClaimsFromUserInfoEndpoint = true;
 		        options.SaveTokens = true;
-
 	        });
         }
 

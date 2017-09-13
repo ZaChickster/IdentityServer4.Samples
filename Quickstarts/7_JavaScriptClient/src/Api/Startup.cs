@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Api
 {
@@ -37,14 +38,19 @@ namespace Api
                 });
             });
 
-	        services.AddAuthentication().AddIdentityServerAuthentication(options =>
-	        {
-		        options.Authority = "http://localhost:5000";
-		        options.RequireHttpsMetadata = false;
-		        options.ApiName = "api1";
-	        });
+	        services.AddAuthentication(o =>
+		    {
+			    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+		    })
+		    .AddJwtBearer(o =>
+		    {
+			    o.Audience = "api1";
+			    o.Authority = "http://localhost:5000";
+			    o.RequireHttpsMetadata = false;
+		    });
 
-            services.AddMvcCore()
+			services.AddMvcCore()
                 .AddAuthorization()
                 .AddJsonFormatters();
         }
